@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/iamatila/bigtrac/config"
-	modelUser "github.com/iamatila/bigtrac/internals/models"
+	model "github.com/iamatila/bigtrac/internals/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -25,8 +25,8 @@ func ConnectDB() {
 	}
 
 	// Connection URL to connect to Postgres Database
-	// dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require", config.Config("DB_HOST"), port, config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_NAME"))
-	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Config("DB_HOST"), port, config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_NAME"))
+	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require", config.Config("DB_HOST"), port, config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_NAME"))
+	// dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Config("DB_HOST"), port, config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_NAME"))
 	// Connect to the DB and initialize the DB variable
 	DB, err = gorm.Open(postgres.Open(dsn))
 
@@ -38,7 +38,9 @@ func ConnectDB() {
 
 	// Migrate the database
 	err = DB.AutoMigrate(
-		&modelUser.User{},
+		&model.User{},
+		&model.Track{},
+		&model.Find{},
 	)
 	if err != nil {
 		log.Fatalf("failed to migrate database: %v", err)
